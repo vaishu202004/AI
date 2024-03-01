@@ -1,0 +1,56 @@
+
+def water_jug_bfs(jug1, jug2, target):
+    start_state = State(0, 0)  
+    visited = set()  
+    queue = deque([start_state])  
+    visited.add(start_state)
+
+    while queue:
+        current_state = queue.popleft()
+        if current_state.x == target or current_state.y == target:
+            return current_state
+        if current_state.x > 0:
+            new_state = State(0, current_state.y)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+        if current_state.y > 0:
+            new_state = State(current_state.x, 0)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+        if current_state.x < jug1:
+            new_state = State(jug1, current_state.y)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+        if current_state.y < jug2:
+            new_state = State(current_state.x, jug2)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+        if current_state.x > 0 and current_state.y < jug2:
+            transfer_amount = min(current_state.x, jug2 - current_state.y)
+            new_state = State(current_state.x - transfer_amount, current_state.y + transfer_amount)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+        if current_state.y > 0 and current_state.x < jug1:
+            transfer_amount = min(current_state.y, jug1 - current_state.x)
+            new_state = State(current_state.x + transfer_amount, current_state.y - transfer_amount)
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append(new_state)
+
+    return None  
+jug1_capacity = 4
+jug2_capacity = 3
+target_amount = 2
+
+solution = water_jug_bfs(jug1_capacity, jug2_capacity, target_amount)
+
+if solution:
+    print("Solution found:", solution)
+else:
+    print("No solution exists.")
+
